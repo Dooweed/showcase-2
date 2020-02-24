@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="running_line">
+		<div class="running_line_align_block">
+			<p class="text animation-class">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem possimus, iusto, ea minus facilis commodi magnam similique nam aspernatur eaque, sequi nemo perspiciatis quas</p>
+		</div>
+	</div>
+	<script>
+		var block = document.getElementsByClassName("running_line"),
+			text  = document.getElementsByClassName("animation-class"),
+			togglePauseOn = [];
+		for (var i = block.length - 1; i >= 0; i--) {
+			togglePauseOn.push(0);
+		}
+
+		for (var i = block.length - 1; i >= 0; i--) {
+			var textCurrent = text[i]
+			var blockCurrent = block[i]
+
+			var KEYFRAMES_STR = "@keyframes runningLineKeyframes{  0%{    left: DYNAMIC_VALUE_1;    }100%{    left: DYNAMIC_VALUE_2;    }}";
+			var style = document.createElement('style');
+			style.type = 'text/css';
+			KEYFRAMES_STR = KEYFRAMES_STR.replace("DYNAMIC_VALUE_1", blockCurrent.offsetWidth.toString() + "px").replace("DYNAMIC_VALUE_2", -textCurrent.offsetWidth.toString() + "px");
+			style.innerHTML = KEYFRAMES_STR;
+			document.getElementsByTagName('head')[0].appendChild(style);
+
+			document.addEventListener("mouseup", removeMouse);
+			document.addEventListener("touchend", removeTouch);
+			blockCurrent.addEventListener("mousedown", addMouse);
+			blockCurrent.addEventListener("touchstart", addTouch);
+			blockCurrent.addEventListener("mouseenter", togglePause);
+			blockCurrent.addEventListener("mouseleave", togglePause);
+			function togglePause(){
+				if(!togglePauseOn[i]){
+					textCurrent.classList.add("animation-pause-class");
+				}
+				else{
+					textCurrent.classList.remove("animation-pause-class");
+				}
+				togglePauseOn[i] = !togglePauseOn[i];
+			}
+			function addMouse(event) {
+				previous_coordinate = event.screenX;
+				textCurrent.style.left = window.getComputedStyle(textCurrent).left;
+				textCurrent.classList.remove("animation-class");
+				document.addEventListener("mousemove", slideFunc);
+			}
+			function removeMouse(event) {
+				document.removeEventListener("mousemove", slideFunc);
+				//textCurrent.classList.add("animation-class");
+				computed = textCurrent.offsetWidth + parseInt(textCurrent.style.left.replace("px", ""));
+				textCurrent.style.animationDelay = ((1 - computed/(textCurrent.offsetWidth + blockCurrent.offsetWidth))*(-8)).toString() + "s";
+			}
+			function addTouch(event) {
+				previous_coordinate = event.touches[0].screenX;
+				textCurrent.style.left = window.getComputedStyle(textCurrent).left;
+				textCurrent.classList.remove("animation-class");
+				document.addEventListener("touchmove", slideFuncMobile);
+			}
+			function removeTouch(event) {
+				document.removeEventListener("touchmove", slideFuncMobile);
+				//textCurrent.classList.add("animation-class");
+				computed = textCurrent.offsetWidth + parseInt(textCurrent.style.left.replace("px", ""));
+				textCurrent.style.animationDelay = ((1 - computed/(textCurrent.offsetWidth + blockCurrent.offsetWidth))*(-8)).toString() + "s";
+			}
+			function slideFunc(event){
+				get_left = parseInt((window.getComputedStyle(textCurrent).left.replace("px", "")));
+				textCurrent.style.left = (get_left + event.screenX - previous_coordinate).toString() + "px";
+				previous_coordinate = event.screenX;
+			}
+			function slideFuncMobile(event){
+				screenX = event.touches[0].screenX;
+				get_left = parseInt((window.getComputedStyle(textCurrent).left.replace("px", "")));
+				textCurrent.style.left = (get_left + 3*(screenX - previous_coordinate)).toString() + "px";
+				previous_coordinate = screenX;
+			}
+	}
+	</script>
+</body>
+</html>

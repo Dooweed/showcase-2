@@ -1,0 +1,40 @@
+.running_line{
+	width: 100%;
+	height: 50px;
+	overflow-x: hidden;
+	background-color: black;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.running_line_align_block{
+	width: 10000px;
+	overflow-x: hidden;
+}
+.running_line .running_line_align_block .text{
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 24px;
+	display: inline-block;
+	margin: 0;
+	padding: 0 0 0 20px;
+	color: white;
+	white-space: nowrap;
+	position: relative;
+	cursor: default;
+	user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+.animation-class{
+	animation: runningLineKeyframes 8s linear infinite;
+}
+.animation-pause-class{
+	-webkit-animation-play-state: paused;
+	-khtml-animation-play-state: paused;
+	-moz-animation-play-state: paused;
+	-ms-animation-play-state: paused;
+	animation-play-state: paused;
+}
